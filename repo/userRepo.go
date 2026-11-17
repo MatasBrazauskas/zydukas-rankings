@@ -15,7 +15,7 @@ func CreateUserRepo(db *sql.DB) *UserRepo {
 	}
 }
 
-func (u *UserRepo) CreateUser(user *models.User) error {
+func (u *UserRepo) CreateUser(user *models.CreateUserPayload) error {
 	query := `INSERT INTO users (username) VALUES ($1) RETURNING id;`
 
 	if err := u.db.QueryRow(query, user.Username); err != nil {

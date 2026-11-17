@@ -16,7 +16,7 @@ func NewUserService(userRepo *repo.UserRepo) *UserService {
 	}
 }
 
-func (u *UserService) CreateUser(user *models.User) *utils.CustomErrors {
+func (u *UserService) CreateUser(user *models.CreateUserPayload) *utils.CustomErrors {
 	if err := u.userRepo.CreateUser(user); err != nil {
 		return &utils.ErrCreatingUser
 	}

@@ -1,3 +1,6 @@
 .env
 .air.toml
 bin/
+firebase_config.json
+output/
+data.jpg

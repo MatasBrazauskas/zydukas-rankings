@@ -14,6 +14,9 @@ const (
 	WriteTimeout = 30 * time.Second
 	ReadTimeout  = 30 * time.Second
 	IdleTimeout  = 60 * time.Second
+
+	MaxBodyLength    = 1024 * 1024
+	UserContextTitle = "userContext"
 )
 
 type CustomErrors struct {
@@ -21,7 +24,14 @@ type CustomErrors struct {
 }
 
 var (
-	ErrIntervalError = CustomErrors{"interval Error"}
+	ErrIntervalError  = CustomErrors{"Interval Error"}
+	ErrReadingPayload = CustomErrors{"Error Reading Payload"}
+	ErrWritingPayload = CustomErrors{"Error Writing Payload"}
 
-	ErrCreatingUser = CustomErrors{"user creation error"}
+	ErrCreatingUser = CustomErrors{"User Creation Error"}
+
+	ErrNoAuthHeader = CustomErrors{"No Auth Header"}
+	ErrInvalidJwt   = CustomErrors{"Invalid JWT token."}
+
+	ErrNoFileAttached = CustomErrors{"No File attached."}
 )

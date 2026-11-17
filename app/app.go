@@ -6,21 +6,24 @@ import (
 	"net/http"
 	"time"
 	"zydukas-rankings/controller"
+	"zydukas-rankings/middleware"
 	"zydukas-rankings/utils"
 
+	"firebase.google.com/go/auth"
+	"github.com/gin-contrib/gzip"
+	"github.com/gin-gonic/gin"
 	//"zydukas-rankings/controller"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 type AppCore struct {
-	UserController *controller.UserController
+	UserController  *controller.UserController
+	PostsController *controller.PostsController
 }
 
 func GetAppCore(db *sql.DB) *AppCore {
 	return &AppCore{
-		UserController: controller.CreateUserController(db),
+		UserController:  controller.CreateUserController(db),
+		PostsController: controller.CreatePostsController(db),
 	}
 }
 
@@ -40,16 +43,20 @@ func GetAppConfig() *AppConfig {
 	}
 }
 
-func GetHandlers(appCore *AppCore) http.Handler {
-	router := chi.NewRouter()
+func GetHandlers(appCore *AppCore, authClient *auth.Client) http.Handler {
+	router := gin.Default()
 
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.RequestID)
-	router.Use(middleware.ClientIPFromRemoteAddr)
+	router.GET("/health", controller.HealthCheckHandler) // public
 
-	router.Get("/health", controller.HealthCheckHandler)
-	router.Post("/create_user", appCore.UserController.CreateUser)
+	usersRoute := router.Group("/users")
+	usersRoute.Use(middleware.FirebaseMiddleware(authClient))
+
+	usersRoute.POST("/create", appCore.UserController.CreateUser)
+
+	postsRoute := router.Group("/posts")
+	postsRoute.Use(gzip.Gzip(gzip.DefaultCompression))
+
+	postsRoute.POST("/upload", appCore.PostsController.CreatePost)
 
 	return router
 }
