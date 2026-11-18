@@ -1,14 +1,20 @@
 package models
 
 type User struct {
-	Username string `json:"username"`
+	ID         uint   `gorm:"primaryKey"`
+	Username   string `gorm:"unique;not null"`
+	FirebaseId string `gorm:"unique;not null"`
 }
 
 type CreateUserPayload struct {
 	Username string `json:"username" validate:"required,non_empty"`
 }
 
+type CreateUserContextPayload struct {
+	Username   string
+	FirebaseId string
+}
+
 type UserContext struct {
-	Username string
-	Email    string
+	FireBaseId string `json:"firebase_id"`
 }

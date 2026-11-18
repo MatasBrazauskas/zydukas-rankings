@@ -1,18 +1,17 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
-	"time"
+	"strconv"
 	"zydukas-rankings/controller"
 	"zydukas-rankings/middleware"
 	"zydukas-rankings/utils"
 
 	"firebase.google.com/go/auth"
-	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	//"zydukas-rankings/controller"
 )
 
@@ -22,7 +21,7 @@ type AppCore struct {
 	PostsController *controller.PostsController
 }
 
-func GetAppCore(db *sql.DB, sugaredLogger *zap.SugaredLogger) *AppCore {
+func GetAppCore(db *gorm.DB, sugaredLogger *zap.SugaredLogger) *AppCore {
 	return &AppCore{
 		logger:          sugaredLogger,
 		UserController:  controller.CreateUserController(db),
@@ -31,18 +30,25 @@ func GetAppCore(db *sql.DB, sugaredLogger *zap.SugaredLogger) *AppCore {
 }
 
 type AppConfig struct {
-	port         string
-	writeTimeout time.Duration
+	Port string
+	/*writeTimeout time.Duration
 	readTimeout  time.Duration
-	idleTimeout  time.Duration
+	idleTimeout  time.Duration*/
 }
 
 func GetAppConfig() *AppConfig {
+	portNum, err := utils.EnvInt("SERVER_PORT")
+	if err != nil {
+		return nil
+	}
+
+	port := ":" + strconv.Itoa(portNum)
+
 	return &AppConfig{
-		port:         utils.Port,
-		writeTimeout: utils.WriteTimeout,
+		Port: port,
+		/*writeTimeout: utils.WriteTimeout,
 		readTimeout:  utils.ReadTimeout,
-		idleTimeout:  utils.IdleTimeout,
+		idleTimeout:  utils.IdleTimeout,*/
 	}
 }
 
@@ -57,7 +63,7 @@ func GetHandlers(appCore *AppCore, authClient *auth.Client) http.Handler {
 	usersRoute.POST("/create", appCore.UserController.CreateUser)
 
 	postsRoute := router.Group("/posts")
-	postsRoute.Use(gzip.Gzip(gzip.DefaultCompression))
+	//postsRoute.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	postsRoute.POST("/upload", appCore.PostsController.CreatePost)
 
@@ -67,14 +73,14 @@ func GetHandlers(appCore *AppCore, authClient *auth.Client) http.Handler {
 func RunApplication(handler http.Handler, appConfig *AppConfig) error {
 
 	server := http.Server{
-		Addr:         appConfig.port,
-		Handler:      handler,
-		WriteTimeout: appConfig.writeTimeout,
+		Addr:    appConfig.Port,
+		Handler: handler,
+		/*WriteTimeout: appConfig.writeTimeout,
 		ReadTimeout:  appConfig.readTimeout,
-		IdleTimeout:  appConfig.idleTimeout,
+		IdleTimeout:  appConfig.idleTimeout,*/
 	}
 
-	log.Printf("Server started. Listening on %s", appConfig.port)
+	log.Printf("Server started. Listening on %s", appConfig.Port)
 
 	return server.ListenAndServe()
 }

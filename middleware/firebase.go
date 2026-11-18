@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 	"strings"
 	"zydukas-rankings/models"
@@ -31,21 +32,17 @@ func FirebaseMiddleware(authClient *auth.Client) gin.HandlerFunc {
 			return
 		}
 
-		email, ok := token.Claims["email"].(string)
+		log.Print(header)
+
+		firebaseId, ok := token.Claims["firebase_id"].(string)
 
 		if !ok {
-			email = ""
-		}
-
-		name, ok := token.Claims["name"].(string)
-
-		if !ok {
-			name = ""
+			g.AbortWithStatusJSON(http.StatusUnauthorized, &utils.ErrInvalidJwt)
+			return
 		}
 
 		authUser := models.UserContext{
-			Username: name,
-			Email:    email,
+			FireBaseId: firebaseId,
 		}
 
 		g.Set(utils.UserContextTitle, authUser)

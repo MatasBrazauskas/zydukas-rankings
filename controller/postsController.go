@@ -1,19 +1,19 @@
 package controller
 
 import (
-	"database/sql"
 	"net/http"
 	"os"
 	"path/filepath"
 	"zydukas-rankings/utils"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type PostsController struct {
 }
 
-func CreatePostsController(db *sql.DB) *PostsController {
+func CreatePostsController(db *gorm.DB) *PostsController {
 	return &PostsController{}
 }
 
