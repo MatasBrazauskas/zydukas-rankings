@@ -12,16 +12,19 @@ import (
 	"firebase.google.com/go/auth"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	//"zydukas-rankings/controller"
 )
 
 type AppCore struct {
+	logger          *zap.SugaredLogger
 	UserController  *controller.UserController
 	PostsController *controller.PostsController
 }
 
-func GetAppCore(db *sql.DB) *AppCore {
+func GetAppCore(db *sql.DB, sugaredLogger *zap.SugaredLogger) *AppCore {
 	return &AppCore{
+		logger:          sugaredLogger,
 		UserController:  controller.CreateUserController(db),
 		PostsController: controller.CreatePostsController(db),
 	}
