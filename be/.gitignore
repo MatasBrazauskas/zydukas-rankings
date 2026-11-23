@@ -1,0 +1,12 @@
+.env
+.air.toml
+
+firebase_config.json
+rateScript
+Makefile
+
+.idea/
+uploads/
+bin/
+output/
+cmd/

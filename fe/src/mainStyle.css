@@ -1,0 +1,128 @@
+/* One green, one white. Bootstrap 5.3 reads its component colours from CSS
+   variables, so the overrides below are enough to repaint every page — the
+   buttons, links, focus rings and nav all follow these tokens. */
+:root {
+    --brand: #16a34a;
+    --brand-dark: #15803d;
+    --brand-darker: #166534;
+    --brand-tint: #f0fdf4;
+    --brand-border: #bbf7d0;
+    --brand-ring: rgba(22, 163, 74, .25);
+
+    --bs-link-color: var(--brand-dark);
+    --bs-link-hover-color: var(--brand-darker);
+    --bs-border-radius: .625rem;
+}
+
+body {
+    background-color: #f4f9f5;
+}
+
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid var(--brand-border) !important;
+}
+
+.navbar-brand {
+    color: var(--brand-dark);
+}
+
+.navbar .nav-link {
+    color: #4b5563;
+    border-radius: .5rem;
+    padding-inline: .75rem;
+}
+
+.navbar .nav-link:hover {
+    color: var(--brand-dark);
+    background-color: var(--brand-tint);
+}
+
+.navbar .nav-link.active {
+    color: var(--brand-dark);
+    background-color: var(--brand-tint);
+    font-weight: 600;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--brand);
+    --bs-btn-border-color: var(--brand);
+    --bs-btn-hover-bg: var(--brand-dark);
+    --bs-btn-hover-border-color: var(--brand-dark);
+    --bs-btn-active-bg: var(--brand-darker);
+    --bs-btn-active-border-color: var(--brand-darker);
+    --bs-btn-disabled-bg: var(--brand);
+    --bs-btn-disabled-border-color: var(--brand);
+    --bs-btn-focus-shadow-rgb: 22, 163, 74;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--brand-dark);
+    --bs-btn-border-color: var(--brand-border);
+    --bs-btn-hover-bg: var(--brand);
+    --bs-btn-hover-border-color: var(--brand);
+    --bs-btn-active-bg: var(--brand-dark);
+    --bs-btn-active-border-color: var(--brand-dark);
+    --bs-btn-focus-shadow-rgb: 22, 163, 74;
+}
+
+.btn-link {
+    --bs-btn-color: var(--brand-dark);
+    --bs-btn-hover-color: var(--brand-darker);
+}
+
+.card {
+    border-color: #e6efe8;
+}
+
+.form-control:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 .25rem var(--brand-ring);
+}
+
+.alert-success {
+    --bs-alert-color: var(--brand-darker);
+    --bs-alert-bg: var(--brand-tint);
+    --bs-alert-border-color: var(--brand-border);
+}
+
+.errorToasts {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1080;
+    max-width: 22rem;
+}
+
+/* Profile */
+.profileCover {
+    height: 5.5rem;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-darker) 100%);
+}
+
+/* The initial, not a picture: the avatar Google holds is session data and the
+   users table has no image column. */
+.profileAvatar {
+    width: 5.5rem;
+    height: 5.5rem;
+    margin: -2.75rem auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    background-color: var(--brand-tint);
+    color: var(--brand-dark);
+    font-size: 2rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, .12);
+}
+
+.profileRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .75rem 0;
+    border-top: 1px solid #eef2f0;
+}

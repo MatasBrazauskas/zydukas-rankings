@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16.3
+    container_name: zyd-db
+    environment:
+      POSTGRES_DB: zyd-ranks
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+volumes:
+  db-data:
+  redis-data:
